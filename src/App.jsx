@@ -80,8 +80,7 @@ function Game() {
 
   function restartGame() {
     if (!isCounting || isGameOver) return;
-    setFirstLetter(getRandomLetter());
-    setResult('');
+    setResult('Click Start to play');
     setResultStatus('neutral');
     setTime(TIME_OUT);
     setIsCounting(false);
@@ -123,7 +122,7 @@ function Game() {
       <div className="container">
         <h1 className="title">Word Chain Game</h1>
         <p className={`result result-${resultStatus}`}>
-          {result || `Enter a word starting with: ${firstLetter ? firstLetter.toUpperCase() : 'N/A'}`}
+          {result || (firstLetter ? `Enter a word starting with: ${firstLetter.toUpperCase()}` : 'Click Start to play')}
         </p>
         <p className="minimum-length">Minimum word length: {minimumLength}</p>
         <h2 className="time-left">Time left: {time}s</h2>
@@ -141,7 +140,7 @@ function Game() {
           <button
               type="submit"
               className="submit-button"
-              disabled={isGameOver}
+              disabled={!isCounting || isGameOver}
           >
             Submit
           </button>
@@ -161,6 +160,16 @@ function Game() {
             Restart
           </button>
         </div>
+        <footer className="footer">
+          Created by{' '}
+          <a
+              href="https://github.com/diagnosis"
+              target="_blank"
+              rel="noopener noreferrer"
+          >
+            diagnosis
+          </a>
+        </footer>
       </div>
   );
 }
