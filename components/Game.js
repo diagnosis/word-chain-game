@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from 'react-native';
 import { useMutation } from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 
 const postWord = async (word) => {
-  const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-  if (res.ok) {
-    return res.json();
+  const baseUrl = Platform.select({
+    web: '',
+    default: Constants.expoConfig.extra.apiUrl || 'http://localhost:8081',
+  });
+  
+  const res = await fetch(`${baseUrl}/api/dictionary?word=${encodeURIComponent(word)}`);
+  
+  if (!res.ok) {
+    throw new Error(await res.text());
   }
-  throw new Error('Word not found');
+  
+  return res.json();
 };
 
 export default function Game() {
